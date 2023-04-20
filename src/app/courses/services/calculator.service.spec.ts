@@ -68,3 +68,24 @@ describe("CalculatorService", () => {
     expect(loggerSpy.log).toHaveBeenCalledTimes(1);
   });
 });
+
+/*
+The provided code is a test sample for the CalculatorService service in Angular. The CalculatorService service provides basic functions for performing mathematical operations such as addition and subtraction. 
+The test code verifies that these functions are correct and that they interact correctly with another dependency, the LoggerService service.
+
+The test consists of several steps:
+
+    Import the classes and modules needed to run the test, including the Angular CalculatorService service, LoggerService service, and TestBed testing module.
+
+    Use the describe() function to group tests related to the CalculatorService service.
+
+    Set up a beforeEach() function that runs before every single test. In this function, you create a spy object for the LoggerService service using Jasmine, configure the test module with TestBed.configureTestingModule(), and create an instance of the CalculatorService service using TestBed.inject().
+
+    Writes two specific tests (it() functions) to verify the functionality of the CalculatorService service:
+
+    to. A test to verify the functionality of addition. The test executes the add() function of the CalculatorService service and verifies that the result is correct. Also, check that the log method of the LoggerService service has been called once during the execution of the add() function.
+
+    b. A test to verify subtraction functionality. The test executes the subtract() function of the CalculatorService service and verifies that the result is correct. Again, check that the log method of the LoggerService service has been called once during the execution of the subtract() function.
+
+In summary, the test code provided verifies that the CalculatorService service works correctly for addition and subtraction operations, and that it interacts correctly with its dependency, the LoggerService service. Use Angular's TestBed module to configure and inject the necessary dependencies and Jasmine to create spy objects and verify test results.
+*/
