@@ -30,7 +30,7 @@ describe("HomeComponent", () => {
   let component: HomeComponent;
   let el: DebugElement;
   let coursesService: any;
-
+  // Setup the courses data by category
   const beginnerCourses = setupCourses().filter(
     (course) => course.category == "BEGINNER"
   );
@@ -39,12 +39,13 @@ describe("HomeComponent", () => {
     (course) => course.category == "ADVANCED"
   );
 
-  // Set up TestBed configuration and create instances of the component
+  // Before each test, configure the TestBed with the necessary modules and services
   beforeEach(waitForAsync(() => {
     const coursesServiceSpy = jasmine.createSpyObj("CoursesService", [
       "findAllCourses",
     ]);
 
+    // Set up TestBed configuration and create instances of the component
     TestBed.configureTestingModule({
       imports: [CoursesModule, NoopAnimationsModule],
       providers: [{ provide: CoursesService, useValue: coursesServiceSpy }],
@@ -65,10 +66,13 @@ describe("HomeComponent", () => {
 
   // Test: Verify that only beginner courses are displayed
   it("should display only beginner courses", () => {
+    // Mock the service to return beginner courses
     coursesService.findAllCourses.and.returnValue(of(beginnerCourses));
 
+    // Trigger change detection
     fixture.detectChanges();
 
+    // Check if the correct number of tabs are displayed
     const tabs = el.queryAll(By.css(".mdc-tab"));
 
     expect(tabs.length).toBe(1, "Unexpected number of tabs found");
@@ -76,21 +80,27 @@ describe("HomeComponent", () => {
 
   // Test: Verify that only advanced courses are displayed
   it("should display only advanced courses", () => {
+    // Mock the service to return advanced courses
     coursesService.findAllCourses.and.returnValue(of(advancedCourses));
 
+    // Trigger change detection
     fixture.detectChanges();
 
+    // Check if the correct number of tabs are displayed
     const tabs = el.queryAll(By.css(".mdc-tab"));
 
     expect(tabs.length).toBe(1, "Unexpected number of tabs found");
   });
 
-  // Test: Verify that both tabs are displayed
+  // Test: Verify that both beginner and advanced tabs are displayed
   it("should display both tabs", () => {
+    // Mock the service to return all courses
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
 
+    // Trigger change detection
     fixture.detectChanges();
 
+    // Check if both tabs are displayed
     const tabs = el.queryAll(By.css(".mdc-tab"));
 
     expect(tabs.length).toBe(2, "Expected to find 2 tabs");
@@ -98,18 +108,24 @@ describe("HomeComponent", () => {
 
   // Test: Verify that advanced courses are displayed when the tab is clicked, using fakeAsync
   it("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => {
+    // Mock the service to return all courses
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
 
+    // Trigger change detection
     fixture.detectChanges();
 
+    // Query the tabs and click the advanced courses tab
     const tabs = el.queryAll(By.css(".mdc-tab"));
 
     click(tabs[1]);
 
+    // Trigger change detection again
     fixture.detectChanges();
 
+    // Flush any pending asynchronous tasks
     flush();
 
+    // Check if the correct courses are displayed after clicking the advanced tab
     const cardTitles = el.queryAll(
       By.css(".mat-mdc-tab-body-active .mat-mdc-card-title")
     );
@@ -123,17 +139,23 @@ describe("HomeComponent", () => {
 
   // Test: Verify that advanced courses are displayed when the tab is clicked, using async
   it("should display advanced courses when tab clicked - async", waitForAsync(() => {
+    // Mock the service to return all courses
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
 
+    // Trigger change detection
     fixture.detectChanges();
 
+    // Query the tabs and click the advanced courses tab
     const tabs = el.queryAll(By.css(".mdc-tab"));
 
     click(tabs[1]);
 
+    // Trigger change detection again
     fixture.detectChanges();
 
+    // Wait for all pending asynchronous tasks to complete
     fixture.whenStable().then(() => {
+      // After all asynchronous tasks are complete, check if the correct courses are displayed after clicking the advanced tab
       const cardTitles = el.queryAll(
         By.css(".mat-mdc-tab-body-active .mat-mdc-card-title")
       );
@@ -170,4 +192,16 @@ There are several test cases in this test suite:
 6. **Should display advanced courses when tab clicked - async**: This test case uses the waitForAsync testing approach to achieve the same goal as the previous test case, ensuring that advanced courses are displayed when the advanced courses tab is clicked.
 
 The HomeComponent test suite aims to ensure that the component correctly displays courses based on their category and user interactions, such as clicking tabs to filter courses.
+*/
+/*
+ComponentFixture is a utility class provided by Angular's testing framework. It plays a crucial role in the testing process of Angular components. Essentially, it creates a test environment for a given component, allowing you to perform various operations, such as querying elements, interacting with the component instance, and triggering change detection.
+
+In summary, the ComponentFixture:
+
+    Wraps the component instance and provides access to it via the componentInstance property.
+    Allows you to access the component's DebugElement, which is a useful abstraction for querying and manipulating the DOM elements associated with the component.
+    Provides a method, detectChanges(), to trigger Angular change detection manually within the test environment. This is important because, in tests, change detection is not automatically run as it is in a live application.
+    Offers other utility methods for working with the component during testing, such as whenStable() for working with asynchronous operations.
+
+In your tests, you will typically use ComponentFixture to create an instance of the component you are testing, interact with that instance, and verify that the component's behavior and rendering are as expected.
 */
